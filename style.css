@@ -1,0 +1,23 @@
+body {
+    background: #eee;
+}
+
+#content {
+    padding: 0 15px;
+}
+
+.eta-task-checkbox {
+    float: left;
+}
+
+.eta-task-done {
+    text-decoration: line-through;
+    display: block;
+}
+
+.eta-task-delete {
+    float: right;
+    cursor: pointer;
+    margin: 8px;
+    padding-top: 2px;
+}
