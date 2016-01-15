@@ -2,7 +2,9 @@ var app = angular.module('todoApp', ['ngMaterial']);
 
 app.controller('AppCtrl', ['$scope', '$mdDialog', '$mdToast', function($scope, $mdDialog, $mdToast){
 
+    var _existingTasks = JSON.parse(localStorage.getItem("taskName"));
 
+    // Init Todo List - adding an item to localStorage in case it is empty.
     if (!localStorage.getItem("taskName")) {
         localStorage.setItem("taskName", JSON.stringify({
             1452435614966: {
@@ -10,25 +12,38 @@ app.controller('AppCtrl', ['$scope', '$mdDialog', '$mdToast', function($scope, $
                 done: false,
                 id: 1452435614966
             }
-        }))
+        }));
+    }
+    else {
+        // Get all todo-items from local storage
+        $scope.locStorTasks = _existingTasks;
     }
 
+    /* Application options
+    * name - name of the application
+    * show - default tab, which is active on start
+    */
     $scope.options = {
         name: 'My Todo List',
         show: 'All tasks'
     };
 
+    // Menu items description with icon-id of material icon
     $scope.navigationBarItems = [
         {'title': 'All tasks', 'icon': 'list'},
         {'title': 'Todo', 'icon': 'assignment'},
         {'title': 'Done', 'icon': 'done'}
     ];
 
-    $scope.objectDone = function () {
-        var t = $scope.locStorTasks;
-        localStorage.setItem("taskName", JSON.stringify(t));
+    // Set task as done
+    $scope.updateLocalStorage = function () {
+        // Workaround: waiting for model update in $scope
+        setTimeout(function () {
+            localStorage.setItem("taskName", JSON.stringify($scope.locStorTasks));
+        }, 150);
     };
 
+    // Delete task from the list
     $scope.objectDelete = function (item) {
         var t = $scope.locStorTasks;
         delete t[item];
@@ -39,30 +54,35 @@ app.controller('AppCtrl', ['$scope', '$mdDialog', '$mdToast', function($scope, $
         $scope.options.show = content;
     };
 
+    // Add item to the local storage
     $scope.addToLocalStorage = function (name) {
+        // Prevent adding of emty tasks
+        if (name === undefined) return;
 
-        var existingTasks = JSON.parse(localStorage.getItem("taskName"));
+        // Generate random task id
         var newTaskDate = new Date().getTime();
 
-        existingTasks[newTaskDate] = {
+        _existingTasks[newTaskDate] = {
             'name': name,
             'done': false,
             'id': newTaskDate
         };
 
-        localStorage.setItem("taskName", JSON.stringify(existingTasks));
-
+        // Add item to the view model and local storage
+        $scope.locStorTasks[newTaskDate] = _existingTasks[newTaskDate];
+        localStorage.setItem("taskName", JSON.stringify(_existingTasks));
+        $mdToast.showSimple('Task "' + name + '" was added!');
     };
 
+    // Show form for new task on fab-click
     $scope.showAdd = function(ev) {
         $mdDialog.show({
             controller: AddDialogCtrl,
-            template: '<md-dialog aria-label="User Form"> <md-content class="md-padding"> <form name="userForm"> <md-input-container> <label>New Task</label> <input ng-model="newTask" placeholder="Placeholder text"> </md-input-container> </form> </md-content> <div class="md-actions" layout="row"> <span flex></span> <md-button ng-click="cancel()"> Cancel </md-button> <md-button ng-click="add(newTask)" class="md-primary"> Add task </md-button> </div></md-dialog>',
+            templateUrl: 'add-task.html',
             targetEvent: ev
         })
             .then(function(task) {
                 $scope.addToLocalStorage(task);
-                $mdToast.showSimple('Task "' + task + '" was added!');
             });
     };
 

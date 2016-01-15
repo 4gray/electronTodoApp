@@ -25,7 +25,7 @@
     <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
         <md-content>
             <md-list>
-                <md-list-item ng-repeat="navItem in navigationBarItems" ng-click="setContent(navItem.title)">
+                <md-list-item ng-repeat="navItem in navigationBarItems" ng-click="setContent(navItem.title)" ng-class="{'selected-nav-item': navItem.title===options.show}">
                     <md-icon md-font-set="material-icons">{{navItem.icon}}</md-icon>
                     <p>{{navItem.title}}</p>
                     <md-divider></md-divider>
@@ -36,28 +36,47 @@
 
     <div layout="column" flex id="content">
 
-        <md-input-container class="md-block">
-            <label for="input_22">New To Do</label>
-            <input type="text" ng-model="userTypedText.text" class="ng-pristine ng-valid md-input ng-touched" id="input_22" aria-invalid="false" ng-pattern="userTypedText.word" required ng-trim="false"><div class="md-errors-spacer"></div>
-        </md-input-container>
-
-        <!-- all tasks -->
-        <!--<md-input-container>-->
-            <!--<input type="text" class="ng-pristine ng-valid md-input ng-touched" id="js-userTypedText" ng-model="userTypedText.text" ng-pattern="userTypedText.word" required ng-trim="false">-->
-        <!--</md-input-container>-->
+        <form>
+            <md-input-container class="md-block">
+                <label for="input_22">New To Do</label>
+                <input type="text" ng-model="userTypedText.text" class="ng-pristine ng-valid md-input ng-touched" id="input_22" aria-invalid="false" ng-pattern="userTypedText.word" required ng-trim="false"><div class="md-errors-spacer"></div>
+            </md-input-container>
+        </form>
 
         <md-button class="md-button md-raised md-primary" ng-click="addToLocalStorage(userTypedText.text)">add to local storage</md-button>
 
+        <!-- All Tasks -->
         <md-card flex-gt-sm="90" flex-gt-md="80" ng-repeat="(taskName, object) in locStorTasks | orderBy: 'done'" ng-if="options.show === 'All tasks'">
-            <md-card-content ng-click="objectDone(object.id)">
-                <md-checkbox class="eta-task-checkbox" aria-label="{{ object.name }}" ng-model="object.done" data-taskId="{{object.id}}">
-                    <span ng-if="object.done === true" class="eta-task-done">{{object.name}}</span>
-                    <span ng-if="object.done === false">{{object.name}}</span>
-
+            <md-card-content>
+                <md-checkbox class="eta-task-checkbox" aria-label="{{ object.name }}" ng-model="object.done" ng-click="updateLocalStorage()">
+                    <span ng-if="object.done" class="eta-task-done">{{object.name}}</span>
+                    <span ng-if="!object.done">{{object.name}}</span>
                 </md-checkbox>
                 <i ng-click="objectDelete(object.id)" class="material-icons eta-task-delete">&#xE872;</i>
             </md-card-content>
         </md-card>
+
+        <md-card flex-gt-sm="90" flex-gt-md="80" ng-repeat="(taskName, object) in locStorTasks" ng-if="options.show === 'Todo'">
+            <md-card-content ng-if="!object.done">
+                <md-checkbox class="eta-task-checkbox" aria-label="{{ object.name }}" ng-model="object.done" ng-click="updateLocalStorage()">
+                    <span ng-if="!object.done">{{object.name}}</span>
+                </md-checkbox>
+                <i ng-click="objectDelete(object.id)" class="material-icons eta-task-delete">&#xE872;</i>
+            </md-card-content>
+        </md-card>
+
+        <md-card flex-gt-sm="90" flex-gt-md="80" ng-repeat="(taskName, object) in locStorTasks" ng-if="options.show === 'Done'">
+            <md-card-content ng-if="object.done">
+                <md-checkbox class="eta-task-checkbox" aria-label="{{ object.name }}" ng-model="object.done" ng-click="updateLocalStorage()">
+                    <span ng-if="object.done === true" class="eta-task-done">{{object.name}}</span>
+                </md-checkbox>
+                <i ng-click="objectDelete(object.id)" class="material-icons eta-task-delete">&#xE872;</i>
+            </md-card-content>
+        </md-card>
+
+
+
+
 
     </div>
 </div>
