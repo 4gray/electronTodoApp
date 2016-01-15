@@ -3,7 +3,6 @@ var app = angular.module('todoApp', ['ngMaterial']);
 app.controller('AppCtrl', ['$scope', '$mdDialog', '$mdToast', function($scope, $mdDialog, $mdToast){
 
 
-    // Adding an item to localStorage in case it is empty.
     if (!localStorage.getItem("taskName")) {
         localStorage.setItem("taskName", JSON.stringify({
             1452435614966: {
@@ -25,8 +24,6 @@ app.controller('AppCtrl', ['$scope', '$mdDialog', '$mdToast', function($scope, $
         {'title': 'Done', 'icon': 'done'}
     ];
 
-    $scope.locStorTasks = JSON.parse(localStorage.getItem("taskName"));
-
     $scope.objectDone = function () {
         var t = $scope.locStorTasks;
         localStorage.setItem("taskName", JSON.stringify(t));
@@ -45,7 +42,6 @@ app.controller('AppCtrl', ['$scope', '$mdDialog', '$mdToast', function($scope, $
     $scope.addToLocalStorage = function (name) {
 
         var existingTasks = JSON.parse(localStorage.getItem("taskName"));
-
         var newTaskDate = new Date().getTime();
 
         existingTasks[newTaskDate] = {
@@ -56,7 +52,6 @@ app.controller('AppCtrl', ['$scope', '$mdDialog', '$mdToast', function($scope, $
 
         localStorage.setItem("taskName", JSON.stringify(existingTasks));
 
-        setTimeout(function () {location.reload();}, 150);
     };
 
     $scope.showAdd = function(ev) {
