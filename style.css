@@ -1,9 +1,6 @@
-body {
-    background: #eee;
-}
-
 #content {
     padding: 0 15px;
+    height:100%;
 }
 
 .eta-task-checkbox {
@@ -16,12 +13,26 @@ body {
 }
 
 .eta-task-delete {
-    float: right;
     cursor: pointer;
-    margin: 8px;
+    line-height:72px;
     padding-top: 2px;
 }
 
 .selected-nav-item {
 	background: #eee;
+}
+
+.ng-animate {
+    transition:0s none;
+    -webkit-transition:0s none;
+    animation: 0s none;
+    -webkit-animation: 0s none;
+}
+
+md-list {
+    padding: 0;
+}
+
+.task-name {
+    margin:18px 0 0 0 !important;
 }
