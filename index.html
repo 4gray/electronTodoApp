@@ -1,101 +1,17 @@
 <!DOCTYPE html>
 <html ng-app="todoApp">
 <head>
-    <title>My Todo App</title>
-    <link rel="stylesheet" type="text/css" href="node_modules/angular-material/angular-material.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
-    <script type="text/javascript" src="node_modules/angular-animate/angular-animate.min.js"></script>
-    <script type="text/javascript" src="node_modules/angular-aria/angular-aria.min.js"></script>
-    <script type="text/javascript" src="node_modules/angular-material/angular-material.min.js"></script>
-
+    <title>Electron ToDo App</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 
-<body layout="column" ng-controller="AppCtrl" ng-cloak>
-
-    <!-- Toolbar with title -->
-    <md-toolbar layout="row">
-        <h1 class="md-toolbar-tools">{{options.name}} - {{options.show}}</h1>
-    </md-toolbar>
-
-    <div layout="row" flex>
-
-        <!-- Sidebar with navigation -->
-        <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('min-width: 300px')">
-            <md-content>
-                <md-list class="sidebar-menu">
-                    <md-list-item ng-repeat="navItem in navigationBarItems" ng-click="setContent(navItem.title)" ng-class="{'selected-nav-item': navItem.title===options.show}">
-                        <md-icon md-font-set="material-icons">{{navItem.icon}}</md-icon>
-                        <p>{{navItem.title}}</p>
-                        <md-divider ng-if="!$last"></md-divider>
-                    </md-list-item>
-                </md-list>
-            </md-content>
-        </md-sidenav>
-
-        <div layout="column" flex id="content">
-
-            <form ng-submit="addToLocalStorage(taskName)">
-                <md-input-container class="md-block task-name">
-                    <label for="taskName">New To Do *</label>
-                    <input type="text" ng-model="taskName" class="ng-pristine ng-valid md-input ng-touched" id="taskName" aria-invalid="false" ng-pattern="taskName" ng-required="true" ng-trim="false"><div class="md-errors-spacer"></div>
-                </md-input-container>
-            </form>
-
-            <!-- <md-button class="md-button md-raised md-primary" ng-click="addToLocalStorage(taskName)">Add task</md-button> -->
-
-            <md-content layout="column">
-             <div flex-xs flex-gt-xs="50" layout="column">
-                <!-- All Tasks -->
-                <md-list ng-if="options.show === 'All tasks'">
-                    <md-list-item class="md-2-line" ng-repeat="(taskName, object) in locStorTasks" >
-                        <md-checkbox  aria-label="{{ object.name }}" ng-model="object.done" ng-click="updateLocalStorage()"></md-checkbox>
-                        <div class="md-list-item-text">
-                            <h3 ng-if="object.done" class="eta-task-done">{{object.name}}</h3>
-                            <h3 ng-if="!object.done">{{object.name}}</h3>
-                        </div>
-                        <i ng-click="objectDelete(object.id)" class="material-icons eta-task-delete">&#xE872;</i>
-                        <md-divider ng-if="!$last"></md-divider>
-                    </md-list-item>
-                </md-list>
-
-                <!-- TODO -->
-                <md-list ng-if="options.show === 'Todo'">
-                    <md-list-item class="md-2-line" ng-repeat="(taskName, object) in locStorTasks" ng-show="!object.done">
-                        <md-checkbox  aria-label="{{ object.name }}" ng-model="object.done" ng-click="updateLocalStorage()"></md-checkbox>
-                        <div class="md-list-item-text">
-                            <h3 ng-if="!object.done">{{object.name}}</h3>
-                        </div>
-                        <i ng-click="objectDelete(object.id)" class="material-icons eta-task-delete">&#xE872;</i>
-                        <md-divider ng-if="!$last"></md-divider>
-                    </md-list-item>
-                </md-list>
-
-                <!-- DONE -->
-                <md-list ng-if="options.show === 'Done'">
-                    <md-list-item class="md-2-line" ng-repeat="(taskName, object) in locStorTasks" ng-show="object.done">
-                        <md-checkbox  aria-label="{{ object.name }}" ng-model="object.done" ng-click="updateLocalStorage()"></md-checkbox>
-                        <div class="md-list-item-text">
-                            <h3 ng-if="object.done === true" class="eta-task-done">{{object.name}}</h3>
-                        </div>
-                        <i ng-click="objectDelete(object.id)" class="material-icons eta-task-delete">&#xE872;</i>
-                        <md-divider ng-if="!$last"></md-divider>
-                    </md-list-item>
-                </md-list>
-
-            </div>
-            </md-content>
-
-        </div>
+<body>
+    <div id="container">
+        <h1>Electron ToDo App</h1>
+        <p>Simple JavaScript-Application based on Electron, AngularJs 1.* and Angular Material Design. Created for <a href="http://artslab.info/stati/sozdaem-todo-prilozhenie-na-osnove-electron-i-angularjs/">tutorial</a>.</p>
+        <img class="screenshot" alt="ToDo Application created with Electron, AngularJs and Material Design" src="https://camo.githubusercontent.com/2b74d03a041aad6c804a5d155b0c007e2b76a1be/687474703a2f2f692e696d6775722e636f6d2f57494e556f48772e6a7067" />
     </div>
-
-    <!-- Fab button with add dialog -->
-    <!-- <md-button class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="showAddDialog($event)">
-        <md-icon md-font-set="material-icons">add</md-icon>
-    </md-button> -->
-
-    <script type="text/javascript" src="main.js"></script>
-    <script type="text/javascript" src="todoService.js"></script>
 </body>
+
 </html>
